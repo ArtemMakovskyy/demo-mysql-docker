@@ -8,7 +8,7 @@ public class DemoMysqlDockerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoMysqlDockerApplication.class, args);
-        System.out.println("start + 12-12-2023");
+        System.out.println("start ");
     }
 
 }
