@@ -1,0 +1,32 @@
+services:
+  postgresdb:
+    image: postgres
+    restart: unless-stopped
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_postgres_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+  app:
+    depends_on:
+      - postgresdb
+    restart: on-failure
+    image: demo_mysql_docker
+    build: .
+    ports:
+      - 8088:8080
+      - 5005:5005
+    environment:
+      SPRING_APPLICATION_JSON: '{
+         "spring.datasource.url" : "jdbc:postgresql://test_postgres_db:5432/5434",
+          "spring.datasource.username" : "postgres",
+          "spring.datasource.password" : "password",
+          "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.PostgreSQLDialect"
+        }'
+
